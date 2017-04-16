@@ -41,7 +41,7 @@ class F3iFieldFormat {
 	const V_UNSET = -1;
 
 	/**
-	 * @return array list of special replacement functions
+	 * @return array list of whitelisted special replacement functions
 	 */
 	public static function get_special_fns() {
 		return array(self::FN_UPPER, self::FN_LOWER);
@@ -50,29 +50,26 @@ class F3iFieldFormat {
 	public function field_format($submission, $form, $service) {
 		$settings = F3iFieldFormatOptions::settings();
 
-		$fields = array();
-		$pattern = array();
-		$replace = array();
+		_log(__FUNCTION__ . '-before', $submission, $settings);
 
 		foreach((array) $settings[F3iFieldFormatOptions::F_FIELDS] as $i => $input) {
-			_log(__FUNCTION__, $i, $input);
 			// maybe also url-style declaration for source+?destination
 			parse_str($input, $f);
-			$f = array_merge($fields, $f);
 
-			//$fields = explode(F3iFieldFormatOptions::FIELD_DELIM, $settings[F3iFieldFormatOptions::F_FIELDS]);
+			foreach($f as $dest => $src) {
+				if(empty($src)) $src = $dest;
 
-			// regex - pattern, replace
-			$pattern = array_merge($pattern, explode(F3iFieldFormatOptions::MULTI_DELIM, $settings[F3iFieldFormatOptions::F_PATTERNS][$i])); // '/(\d+)\/(\d+)\/(\d+)/';
-			$replace = array_merge($replace, explode(F3iFieldFormatOptions::MULTI_DELIM, $settings[F3iFieldFormatOptions::F_REPLACEMENTS][$i])); //'$2-$1-$3';
-		}
+				if(!isset($submission[$src]) || empty($submission[$src])) continue;
 
-		### _log(__FUNCTION__, $fields, $submission);
+				// corresponding settings
+				$pattern = $settings[F3iFieldFormatOptions::F_PATTERNS][$i];
+				$replace = $settings[F3iFieldFormatOptions::F_REPLACEMENTS][$i];
 
-		foreach($fields as $dest => $src) {
-			if(isset($submission[$src]) && !empty($submission[$src])) {
+				_log(sprintf('replacing "%s" with "%s" in "%s"', $pattern, $replace, $submission[$src]));
+
 				// untouched value; if it's still this after checking special functions just do regular replacement
 				$x = self::V_UNSET;
+
 				// are we using a special function?
 				foreach(self::get_special_fns() as $f) {
 					if(substr($replace, 0, strlen($f)) === $f) {
@@ -84,9 +81,11 @@ class F3iFieldFormat {
 
 				### _log($submission[$src], $x, $src);
 
-				$submission[is_numeric($dest) ? $src : $dest] = $x;
+				$submission[$dest] = $x;
 			}
 		}
+
+		_log(__FUNCTION__ . '-after', $submission);
 
 		return $submission;
 	}//--	fn	field_format

@@ -45,7 +45,7 @@ class F3iFieldFormatOptions extends Wp_Options_Base {
 
 		add_settings_field(
 			self::F_REPLACEMENTS, 
-			__( 'Expected Format (regex replacement)', self::X ), 
+			__( 'Expected Format (regex replacement or function)', self::X ),
 			array(&$this, 'render_replace'), 
 			self::N, 
 			$section
@@ -61,6 +61,7 @@ class F3iFieldFormatOptions extends Wp_Options_Base {
 
 		### _log(__FUNCTION__ . '-after', $settings);
 
+
 		// make sure there are corresponding fields for each; if not duplicate until there are
 		$n = count($settings[self::F_FIELDS]);
 		foreach(array(self::F_PATTERNS, self::F_REPLACEMENTS) as $f) {
@@ -68,6 +69,12 @@ class F3iFieldFormatOptions extends Wp_Options_Base {
 			for ($i = count($settings[$f]); $i < $n; $i++) {
 				$settings[$f][$i] = end($settings[$f]);
 			}
+		}
+
+		// make sure patterns are properly surrounded
+		foreach($settings[self::F_PATTERNS] as $i => &$v) {
+			// assume if it didn't start with slash, also needs it at the end
+			if(substr($v, 0, 1) != '/') $v = '/' . $v . '/';
 		}
 
 		### _log(__FUNCTION__ . '-afterafter', $settings);
@@ -102,7 +109,7 @@ class F3iFieldFormatOptions extends Wp_Options_Base {
 		$this->p('p', 'Separate multiple fields, patterns, and replacements with %s to create new lines on saving.  Leave a line empty to remove it.'
 			, '<code>' . self::MULTI_DELIM . '</code>');
 		$this->p('p', 'If multiple fields provided, there should be corresponding entries for each field; it will automatically copy the last pattern/replacement to fill the list.');
-		$this->p('p', 'Special replacement functions are available: %s'
+		$this->p('p', 'Special functions are available as replacements: %s'
 			, '<code>' . implode('</code>, <code>', F3iFieldFormat::get_special_fns()  ) . '</code>');
 	}
 

@@ -29,7 +29,7 @@ Drop an issue at https://github.com/zaus/forms-3rdparty-submission-format
 
 ## Screenshots ##
 
-N/A.
+Example taking a name field and reversing "First Last" then uppercasing to "LAST, FIRST".
 
 ## Changelog ##
 
