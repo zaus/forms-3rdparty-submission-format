@@ -26,6 +26,27 @@ class F3iFieldFormat {
 		new F3iFieldFormatOptions(__FILE__);
 	}
 
+	/**
+	 * Uppercase function
+	 */
+	const FN_UPPER = 'upper';
+	/**
+	 * Lowercase function
+	 */
+	const FN_LOWER = 'lower';
+
+	/**
+	 * Placeholder value to check if not set
+	 */
+	const V_UNSET = -1;
+
+	/**
+	 * @return array list of special replacement functions
+	 */
+	public static function get_special_fns() {
+		return array(self::FN_UPPER, self::FN_LOWER);
+	}
+
 	public function field_format($submission, $form, $service) {
 		$settings = F3iFieldFormatOptions::settings();
 
@@ -34,22 +55,32 @@ class F3iFieldFormat {
 		$replace = array();
 
 		foreach((array) $settings[F3iFieldFormatOptions::F_FIELDS] as $i => $input) {
-			// url-style declaration for source+?destination
+			_log(__FUNCTION__, $i, $input);
+			// maybe also url-style declaration for source+?destination
 			parse_str($input, $f);
 			$f = array_merge($fields, $f);
 
 			//$fields = explode(F3iFieldFormatOptions::FIELD_DELIM, $settings[F3iFieldFormatOptions::F_FIELDS]);
 
 			// regex - pattern, replace
-			$pattern = array_merge($pattern, explode(F3iFieldFormatOptions::REGEX_DELIM, $settings[F3iFieldFormatOptions::F_PATTERNS][$i])); // '/(\d+)\/(\d+)\/(\d+)/';
-			$replace = array_merge($replace, explode(F3iFieldFormatOptions::REGEX_DELIM, $settings[F3iFieldFormatOptions::F_REPLACEMENTS][$i])); //'$2-$1-$3';
+			$pattern = array_merge($pattern, explode(F3iFieldFormatOptions::MULTI_DELIM, $settings[F3iFieldFormatOptions::F_PATTERNS][$i])); // '/(\d+)\/(\d+)\/(\d+)/';
+			$replace = array_merge($replace, explode(F3iFieldFormatOptions::MULTI_DELIM, $settings[F3iFieldFormatOptions::F_REPLACEMENTS][$i])); //'$2-$1-$3';
 		}
 
-		### _log('bouwgenius-date', $fields, $submission); 
+		### _log(__FUNCTION__, $fields, $submission);
 
 		foreach($fields as $dest => $src) {
 			if(isset($submission[$src]) && !empty($submission[$src])) {
-				$x = preg_replace($pattern, $replace, $submission[$src]);
+				// untouched value; if it's still this after checking special functions just do regular replacement
+				$x = self::V_UNSET;
+				// are we using a special function?
+				foreach(self::get_special_fns() as $f) {
+					if(substr($replace, 0, strlen($f)) === $f) {
+						$x = preg_replace_callback($pattern, array(&$this, $f), $submission[$src]);
+						break;
+					}
+				}
+				if($x === self::V_UNSET) $x = preg_replace($pattern, $replace, $submission[$src]);
 
 				### _log($submission[$src], $x, $src);
 
@@ -58,8 +89,16 @@ class F3iFieldFormat {
 		}
 
 		return $submission;
-	}//--	fn	date_format
-}//---	class	BouwgeniusDateFormat
+	}//--	fn	field_format
+
+	public function upper($matches) {
+		return strtoupper($matches[0]);
+	}
+	public function lower($matches) {
+		return strtolower($matches[0]);
+	}
+
+}//---	class	F3iFieldFormat
 
 // engage!
 new F3iFieldFormat();

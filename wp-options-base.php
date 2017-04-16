@@ -96,7 +96,11 @@ abstract class Wp_Options_Base {
 	}
 
 	/**
-	 * Call within a sanitize callback to prepare an `$isMultiple` setting
+	 * Call within a sanitize callback to prepare an `$isMultiple` setting.
+	 * @usage 	function prep_settings($settings) { $this->_prepare_multiple_setting($settings, self::F_FORMS); }
+	return $settings;
+	}
+
 	 * @param array $settings all settings for plugin
 	 * @param string $key indexed field within $settings corresponding to @see _render with `$isMultiple=true`
 	 * @param bool $remove_empties whether or not to remove empty values
