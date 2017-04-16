@@ -6,7 +6,7 @@ Customize specific Forms-3rdparty submission fields' format.
 
 Allows you to customize the formatting of specific submission fields before mapping to a 3rdparty service endpoint with [Forms 3rdparty Integration](http://wordpress.org/plugins/forms-3rdparty-integration/).
 
-For example, can be used to reformat a Gravity Form or Contact Form 7 'date' field before sending it to a CRM.
+For example, can be used to reformat a Gravity Form or Contact Form 7 'date' field, or uppercasing a name field, before sending it to a CRM.
 
 ## Installation ##
 

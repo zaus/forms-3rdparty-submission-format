@@ -50,7 +50,7 @@ class F3iFieldFormat {
 	public function field_format($submission, $form, $service) {
 		$settings = F3iFieldFormatOptions::settings();
 
-		_log(__FUNCTION__ . '-before', $submission, $settings);
+		### _log(__FUNCTION__ . '-before', $submission, $settings);
 
 		foreach((array) $settings[F3iFieldFormatOptions::F_FIELDS] as $i => $input) {
 			// maybe also url-style declaration for source+?destination
@@ -65,7 +65,7 @@ class F3iFieldFormat {
 				$pattern = $settings[F3iFieldFormatOptions::F_PATTERNS][$i];
 				$replace = $settings[F3iFieldFormatOptions::F_REPLACEMENTS][$i];
 
-				_log(sprintf('replacing "%s" with "%s" in "%s"', $pattern, $replace, $submission[$src]));
+				### _log(sprintf('replacing "%s" with "%s" in "%s"', $pattern, $replace, $submission[$src]));
 
 				// untouched value; if it's still this after checking special functions just do regular replacement
 				$x = self::V_UNSET;
@@ -85,7 +85,7 @@ class F3iFieldFormat {
 			}
 		}
 
-		_log(__FUNCTION__ . '-after', $submission);
+		### _log(__FUNCTION__ . '-after', $submission);
 
 		return $submission;
 	}//--	fn	field_format
