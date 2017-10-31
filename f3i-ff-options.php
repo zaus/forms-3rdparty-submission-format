@@ -105,7 +105,7 @@ class F3iFieldFormatOptions extends Wp_Options_Base {
 
 	function section(  ) { 
 		$this->p('p', 'Enter the field name(s), optionally as %s to be parsed and rearranged according to the given (regex) patterns and replacements.'
-			, '<code>source=destination</code>');
+			, '<code>destination=source</code>');
 		$this->p('p', 'Separate multiple fields, patterns, and replacements with %s to create new lines on saving.  Leave a line empty to remove it.'
 			, '<code>' . self::MULTI_DELIM . '</code>');
 		$this->p('p', 'If multiple fields provided, there should be corresponding entries for each field; it will automatically copy the last pattern/replacement to fill the list.');

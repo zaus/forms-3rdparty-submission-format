@@ -56,6 +56,8 @@ class F3iFieldFormat {
 			// maybe also url-style declaration for source+?destination
 			parse_str($input, $f);
 
+			### _log(__FUNCTION__, $input, $f);
+
 			foreach($f as $dest => $src) {
 				if(empty($src)) $src = $dest;
 
