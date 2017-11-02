@@ -5,7 +5,7 @@ Plugin Name: Forms-3rdparty Submission Reformat
 Plugin URI: https://github.com/zaus/forms-3rdparty-submission-format
 Description: Reformat specific field submission
 Author: zaus
-Version: 0.2
+Version: 0.2.1
 Author URI: http://drzaus.com
 Changelog:
 	0.1	initial

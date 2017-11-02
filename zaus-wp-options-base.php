@@ -1,5 +1,5 @@
 <?php
-abstract class Wp_Options_Base {
+abstract class Zaus_Wp_Options_Base {
 	// generated via http://wpsettingsapi.jeroensormani.com/
 
 //	const N = 'your_plugin';
@@ -177,6 +177,6 @@ abstract class Wp_Options_Base {
 
 	#endregion ------------------ helpers ------------------
 
-}//---	Wp_Options_Base
+}//---	Zaus_Wp_Options_Base
 
 
