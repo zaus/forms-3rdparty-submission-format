@@ -1,6 +1,6 @@
 <?php
 
-if(!class_exists('Wp_Options_Base')) include('zaus-wp-options-base.php');
+if(!class_exists('Zaus_Wp_Options_Base')) include('zaus-wp-options-base.php');
 class F3iFieldFormatOptions extends Zaus_Wp_Options_Base {
 	// generated via http://wpsettingsapi.jeroensormani.com/
 
